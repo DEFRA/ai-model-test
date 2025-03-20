@@ -1,0 +1,9 @@
+fastapi==0.111.0
+ecs-logging==2
+aws_embedded_metrics
+asgi-logger
+pydantic_settings
+dnspython
+pymongo
+pymongo[aws,snappy,zstd,encryption]
+httpx
