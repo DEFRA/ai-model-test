@@ -1,8 +1,8 @@
-# cdp-python-backend-template
+# ai-model-test
 
 This is work-in-progress. See [To Do List](./TODO.md)
 
-- [cdp-python-backend-template](#cdp-python-backend-template)
+- [ai-model-test](#ai-model-test)
   - [Requirements](#requirements)
     - [Python](#python)
     - [Docker](#docker)
