@@ -8,6 +8,7 @@ from app.common.tracing import TraceIdMiddleware
 from app.example.router import router as example_router
 from app.health.router import router as health_router
 from app.llm.router import router as llm_router
+from app.utils.bedrock_client import chat_bedrock
 
 logger = getLogger(__name__)
 
@@ -15,6 +16,9 @@ logger = getLogger(__name__)
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     # Startup
+    chat_bedrock("hello")
+    logger.info("LLM Connected:")
+    logger.info("MongoDB client connected")
     client = await get_mongo_client()
     logger.info("MongoDB client connected")
     yield

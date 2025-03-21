@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from langchain_aws import ChatBedrock
 from pydantic import BaseModel, Field
 
-from app.config import config
+from app.utils.bedrock_client import chat_bedrock
 
 router = APIRouter()
 
@@ -18,16 +17,7 @@ async def chat(request: QuestionRequest):
         raise HTTPException(status_code=400, detail="Question cannot be empty")
 
     try:
-        llm = ChatBedrock(
-            aws_access_key_id=config.AWS_ACCESS_KEY_ID_BEDROCK,
-            aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY_BEDROCK,
-            region=config.AWS_REGION_BEDROCK,
-            # model: 'anthropic.claude-3-haiku-20240307-v1:0',
-            model="anthropic.claude-3-sonnet-20240229-v1:0",
-            beta_use_converse_api=True
-        )
-
-        response = llm.invoke(request.question)
+        response = chat_bedrock(request.question)
 
         return {
             "status": "success",
