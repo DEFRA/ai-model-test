@@ -14,5 +14,11 @@ class AppConfig(BaseSettings):
     enable_metrics: bool = False
     tracing_header: str = "x-cdp-request-id"
 
+    OPENAI_API_KEY: Optional[str] = None
+
+    AWS_ACCESS_KEY_ID_BEDROCK: Optional[str] = None
+    AWS_SECRET_ACCESS_KEY_BEDROCK: Optional[str] = None
+    AWS_REGION_BEDROCK: Optional[str] = None
+
 
 config = AppConfig()

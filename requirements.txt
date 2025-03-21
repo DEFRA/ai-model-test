@@ -7,3 +7,12 @@ dnspython
 pymongo
 pymongo[aws,snappy,zstd,encryption]
 httpx
+
+beautifulsoup4
+isort
+
+langchain
+langchain-chroma
+langchain-community
+langchain-core
+langchain_aws

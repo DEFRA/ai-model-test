@@ -172,3 +172,6 @@ cython_debug/
 
 # local secrets
 compose/secrets.env
+
+#vs code
+.vscode/
