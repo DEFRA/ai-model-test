@@ -1,7 +1,11 @@
+from logging import getLogger
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app.utils.bedrock_client import chat_bedrock
+
+logger = getLogger(__name__)
 
 router = APIRouter()
 
@@ -27,4 +31,5 @@ async def chat(request: QuestionRequest):
         }
 
     except Exception as e:
+            logger.exception("Failed to chat with bedrock")
             raise HTTPException(status_code=500, detail=str(e)) from e
