@@ -3,7 +3,7 @@ from logging import getLogger
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from app.utils.bedrock_client import chat_bedrock
+from app.utils.anthropic_client import AnthropicClient
 
 logger = getLogger(__name__)
 
@@ -15,19 +15,20 @@ class QuestionRequest(BaseModel):
         examples=["What is machine learning?"],
     )
 
-@router.post("/chat")
+@router.post("/anthropic/bedrock/chat")
 async def chat(request: QuestionRequest):
     if not request.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty")
 
     try:
-        response = chat_bedrock(request.question)
+        response = await AnthropicClient.create_message(
+                prompt=request.question,
+                system_prompt="You are a helpful AI assistant which answers the questions a user asks.",
+            )
 
         return {
             "status": "success",
-            "question": request,
-            "response": response.content,
-            "usage": response.usage_metadata
+            "answer": response,
         }
 
     except Exception as e:

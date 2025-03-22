@@ -16,9 +16,16 @@ class AppConfig(BaseSettings):
 
     OPENAI_API_KEY: Optional[str] = None
 
+    # Bedrock
     AWS_ACCESS_KEY_ID_BEDROCK: Optional[str] = None
     AWS_SECRET_ACCESS_KEY_BEDROCK: Optional[str] = None
     AWS_REGION_BEDROCK: Optional[str] = None
+    AWS_BEDROCK_MODEL: Optional[str] = None
+    AWS_USE_CREDENTIALS_BEDROCK: Optional[str] = None
+
+    # Anthropic
+    ANTHROPIC_MAX_TOKENS: Optional[int] = None
+    ANTHROPIC_TEMPERATURE: Optional[float] = None
 
 
 config = AppConfig()

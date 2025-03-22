@@ -16,3 +16,5 @@ langchain-chroma
 langchain-community
 langchain-core
 langchain_aws
+
+anthropic
