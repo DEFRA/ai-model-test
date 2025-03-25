@@ -52,7 +52,7 @@ services:
       - "compose/secrets.env"
     environment:
       PORT: 8085
-      LOCALSTACK_ENDPOINT: http://localstack:4566
+      S3_ENDPOINT: http://localstack:4566
       MONGO_URI: mongodb://mongodb:27017/
     develop:
       watch:

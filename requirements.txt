@@ -18,3 +18,4 @@ langchain-core
 langchain_aws
 
 anthropic
+boto3
