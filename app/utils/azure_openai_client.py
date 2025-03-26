@@ -1,7 +1,11 @@
+from logging import getLogger
+
 import httpx
 from openai import AzureOpenAI
 
 from app.config import config as settings
+
+logger = getLogger(__name__)
 
 model_name = "gpt-4"
 deployment = "gpt-4"
@@ -10,6 +14,9 @@ cdp_https_proxy = settings.CDP_HTTPS_PROXY
 
 def chat_azureopenai(question):
     if cdp_https_proxy:
+
+        logger.info("Using proxy: %s", cdp_https_proxy)
+
         proxies = {
             "https://": cdp_https_proxy
         }
