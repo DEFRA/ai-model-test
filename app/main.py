@@ -11,6 +11,7 @@ from app.common.tracing import TraceIdMiddleware
 from app.data_ingestion.router import router as data_ingestion_router
 from app.example.router import router as example_router
 from app.health.router import router as health_router
+from app.azure_openai.router import router as azure_openai_router
 
 logger = getLogger(__name__)
 
@@ -47,4 +48,6 @@ app.include_router(example_router)
 app.include_router(anthropic_bedrock_router)
 app.include_router(bedrock_router)
 app.include_router(data_ingestion_router)
+app.include_router(azure_openai_router)
+
 

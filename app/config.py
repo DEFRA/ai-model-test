@@ -33,5 +33,10 @@ class AppConfig(BaseSettings):
     ANTHROPIC_MAX_TOKENS: Optional[int] = None
     ANTHROPIC_TEMPERATURE: Optional[float] = None
 
+    # AZURE
+    AZURE_OPENAI_API_KEY: Optional[str] = None
+    AZURE_OPENAI_ENDPOINT: Optional[str] = None
+    AZURE_API_VERSION: Optional[str] = None
+
 
 config = AppConfig()
