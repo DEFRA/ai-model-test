@@ -23,7 +23,7 @@ def chat_azureopenai(question):
 
     if cdp_https_proxy:
         client.with_options(http_client=DefaultHttpxClient(
-            proxies=cdp_https_proxy,
+            proxy=cdp_https_proxy,
             transport=httpx.HTTPTransport(local_address="0.0.0.0"),
         ))
 
