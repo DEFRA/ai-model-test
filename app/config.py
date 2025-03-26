@@ -39,6 +39,7 @@ class AppConfig(BaseSettings):
     AZURE_API_VERSION: Optional[str] = None
 
     CDP_HTTPS_PROXY: Optional[str] = None
+    CDP_HTTP_PROXY: Optional[str] = None
 
 
 config = AppConfig()
