@@ -38,5 +38,7 @@ class AppConfig(BaseSettings):
     AZURE_OPENAI_ENDPOINT: Optional[str] = None
     AZURE_API_VERSION: Optional[str] = None
 
+    CDP_HTTPS_PROXY: Optional[str] = None
+
 
 config = AppConfig()
