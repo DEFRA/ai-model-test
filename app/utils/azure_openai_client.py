@@ -1,6 +1,5 @@
 from logging import getLogger
 
-import httpx
 from openai import AzureOpenAI, DefaultHttpxClient
 
 from app.config import config as settings
@@ -24,8 +23,7 @@ def chat_azureopenai(question):
     if cdp_https_proxy:
         logger.info(f"Using HTTP Proxy: {cdp_http_proxy}")
         client.with_options(http_client=DefaultHttpxClient(
-            proxy=cdp_http_proxy,
-            transport=httpx.HTTPTransport(local_address="0.0.0.0"),
+            proxy=cdp_http_proxy
         ))
 
     response = client.chat.completions.create(
