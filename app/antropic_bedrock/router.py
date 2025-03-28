@@ -32,5 +32,5 @@ async def chat(request: QuestionRequest):
         }
 
     except Exception as e:
-            logger.exception("Failed to chat with bedrock")
+            logger.exception("Failed to chat with Anthropic Bedrock")
             raise HTTPException(status_code=500, detail=str(e)) from e

@@ -3,7 +3,7 @@ from logging import getLogger
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from app.utils.bedrock_client import chat_bedrock
+from app.utils.langchain_azure_openai_client import chat_azureopenai
 
 logger = getLogger(__name__)
 
@@ -15,13 +15,13 @@ class QuestionRequest(BaseModel):
         examples=["What is machine learning?"],
     )
 
-@router.post("/bedrock/chat")
+@router.post("/langchain/azureopenai/chat")
 async def chat(request: QuestionRequest):
     if not request.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty")
 
     try:
-        response = chat_bedrock(request.question)
+        response = chat_azureopenai(request.question)
 
         return {
             "status": "success",
@@ -29,5 +29,5 @@ async def chat(request: QuestionRequest):
         }
 
     except Exception as e:
-            logger.exception("Failed to chat with bedrock")
+            logger.exception("Failed to chat with Langchain Azure OpenAI")
             raise HTTPException(status_code=500, detail=str(e)) from e

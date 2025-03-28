@@ -17,6 +17,7 @@ langchain-community
 langchain-core
 langchain_aws
 langchain_openai
+langchain_azure_ai
 
 anthropic
 boto3
