@@ -11,7 +11,7 @@ deployment = "gpt-4"
 
 cdp_https_proxy = settings.CDP_HTTPS_PROXY
 cdp_http_proxy = settings.CDP_HTTP_PROXY
-http_proxy = settings.HTTP_PROXY
+http_proxy = settings.HTTPS_PROXY
 
 
 def chat_azureopenai(question):
