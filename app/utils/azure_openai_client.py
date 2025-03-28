@@ -9,8 +9,6 @@ logger = getLogger(__name__)
 model_name = "gpt-4"
 deployment = "gpt-4"
 
-cdp_https_proxy = settings.CDP_HTTPS_PROXY
-cdp_http_proxy = settings.CDP_HTTP_PROXY
 http_proxy = settings.HTTPS_PROXY
 
 
@@ -21,8 +19,8 @@ def chat_azureopenai(question):
         api_key=settings.AZURE_OPENAI_API_KEY
     )
 
-    if cdp_https_proxy:
-        logger.info(f"Using HTTP Proxy: {cdp_http_proxy}")
+    if http_proxy:
+        logger.info("Using HTTP Proxy")
         client.with_options(http_client=DefaultHttpxClient(
             proxy=http_proxy
         ))
