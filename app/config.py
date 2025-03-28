@@ -40,6 +40,7 @@ class AppConfig(BaseSettings):
 
     CDP_HTTPS_PROXY: Optional[str] = None
     CDP_HTTP_PROXY: Optional[str] = None
+    HTTPS_PROXY: Optional[str] = None
 
 
 config = AppConfig()

@@ -11,6 +11,7 @@ deployment = "gpt-4"
 
 cdp_https_proxy = settings.CDP_HTTPS_PROXY
 cdp_http_proxy = settings.CDP_HTTP_PROXY
+http_proxy = settings.HTTP_PROXY
 
 
 def chat_azureopenai(question):
@@ -23,7 +24,7 @@ def chat_azureopenai(question):
     if cdp_https_proxy:
         logger.info(f"Using HTTP Proxy: {cdp_http_proxy}")
         client.with_options(http_client=DefaultHttpxClient(
-            proxy=cdp_http_proxy
+            proxy=http_proxy
         ))
 
     response = client.chat.completions.create(
