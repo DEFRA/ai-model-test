@@ -19,6 +19,8 @@ langchain_aws
 langchain_openai
 langchain_azure_ai
 
+langgraph
+
 anthropic
 boto3
 openai

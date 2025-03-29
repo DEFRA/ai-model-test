@@ -4,7 +4,7 @@ from app.config import config as settings
 
 USE_CREDENTIALS = settings.AWS_USE_CREDENTIALS_BEDROCK == "true"
 
-def chat_bedrock(question):
+def chat_bedrock_client():
     model = settings.AWS_BEDROCK_MODEL
     if USE_CREDENTIALS:
         llm = ChatBedrock(
@@ -20,4 +20,8 @@ def chat_bedrock(question):
                 beta_use_converse_api=True
         )
 
+    return llm
+
+def chat_bedrock(question):
+    llm = chat_bedrock_client()
     return llm.invoke(question)

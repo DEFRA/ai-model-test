@@ -13,6 +13,10 @@ from app.example.router import router as example_router
 from app.health.router import router as health_router
 from app.langchain_azure_openai.router import router as langchain_azure_openai_router
 from app.langchain_bedrock.router import router as langchain_bedrock_router
+from app.langchain_simple_rag_chat.router import (
+    router as langchain_simple_rag_chat_router,
+)
+from app.langgraph_rag_chat.router import router as langgraph_rag_chat_router
 
 logger = getLogger(__name__)
 
@@ -51,5 +55,9 @@ app.include_router(langchain_bedrock_router)
 app.include_router(data_ingestion_router)
 app.include_router(azure_openai_router)
 app.include_router(langchain_azure_openai_router)
+app.include_router(langgraph_rag_chat_router)
+app.include_router(langchain_simple_rag_chat_router)
+
+
 
 

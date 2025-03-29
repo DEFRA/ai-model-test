@@ -26,6 +26,7 @@ class VectorStoreClient:
     def load_documents(self, urls):
         docs = [WebBaseLoader(url).load() for url in urls]
         docs_list = [item for sublist in docs for item in sublist]
+        print(f"docs_list {docs_list}")
         doc_splits = self.text_splitter.split_documents(docs_list)
         self.vector_store.add_documents(doc_splits)
         print(f"Loaded {len(doc_splits)} document splits.")
@@ -36,3 +37,7 @@ class VectorStoreClient:
     def clear_vector_store(self):
         self.vector_store = InMemoryVectorStore(OpenAIEmbeddings())
         print("Vector store cleared.")
+
+    def as_retriever(self):
+        return self.vector_store.as_retriever()
+
