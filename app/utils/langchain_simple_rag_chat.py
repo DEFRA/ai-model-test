@@ -7,8 +7,8 @@ from app.utils.langchain_bedrock_client import chat_bedrock_client
 from app.utils.vectorstore_client import VectorStoreClient
 
 
-def run_llm(query: str, chat_history: list[tuple[dict, any]]):
-    chat = chat_bedrock_client()
+def run_llm(query: str, chat_history: list[tuple[dict, any]], chat_client=None):
+    chat = chat_client or chat_bedrock_client()
     retriever = VectorStoreClient().as_retriever()
 
     retrieval_qa_chat_prompt = hub.pull("langchain-ai/retrieval-qa-chat")

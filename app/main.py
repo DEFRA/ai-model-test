@@ -5,6 +5,7 @@ from fastapi import FastAPI
 
 from app.antropic_bedrock.router import router as anthropic_bedrock_router
 from app.azure_openai.router import router as azure_openai_router
+from app.chat_history.router import router as chat_history_router
 from app.common.mongo import get_mongo_client
 from app.common.s3 import S3Client
 from app.common.tracing import TraceIdMiddleware
@@ -57,7 +58,4 @@ app.include_router(azure_openai_router)
 app.include_router(langchain_azure_openai_router)
 app.include_router(langgraph_rag_chat_router)
 app.include_router(langchain_simple_rag_chat_router)
-
-
-
-
+app.include_router(chat_history_router)

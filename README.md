@@ -37,6 +37,10 @@ python -m pip install --upgrade pip
 
 # install the dependencies
 pip install -r requirements-dev.txt
+
+# run app
+uvicorn app.main:app --host 0.0.0.0 --port 8085 --reload
+
 ```
 
 This opinionated template uses the [`Fast API`](https://fastapi.tiangolo.com/) Python API framework.
