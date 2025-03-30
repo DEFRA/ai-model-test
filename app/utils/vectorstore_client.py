@@ -5,6 +5,7 @@ from langchain_community.document_loaders import WebBaseLoader
 from langchain_core.vectorstores import InMemoryVectorStore
 from langchain_openai import OpenAIEmbeddings
 
+from app.config import config as settings
 
 class VectorStoreClient:
     _instance = None
@@ -18,7 +19,10 @@ class VectorStoreClient:
         return cls._instance
 
     def _initialize(self):
-        self.vector_store = InMemoryVectorStore(OpenAIEmbeddings())
+        if settings.HTTPS_PROXY is None:
+            self.vector_store = InMemoryVectorStore(OpenAIEmbeddings())
+        else:
+            self.vector_store = InMemoryVectorStore(OpenAIEmbeddings(openai_proxy=settings.HTTPS_PROXY))
         self.text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
             chunk_size=250, chunk_overlap=0
         )
