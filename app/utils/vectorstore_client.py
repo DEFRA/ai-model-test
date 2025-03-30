@@ -3,9 +3,9 @@ from threading import Lock
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_core.vectorstores import InMemoryVectorStore
-from langchain_openai import OpenAIEmbeddings
 
-from app.config import config as settings
+from app.utils.azure_openai_embedding_client import embedding_azureopenai
+
 
 class VectorStoreClient:
     _instance = None
@@ -19,10 +19,8 @@ class VectorStoreClient:
         return cls._instance
 
     def _initialize(self):
-        if settings.HTTPS_PROXY is None:
-            self.vector_store = InMemoryVectorStore(OpenAIEmbeddings())
-        else:
-            self.vector_store = InMemoryVectorStore(OpenAIEmbeddings(openai_proxy=settings.HTTPS_PROXY))
+        self.vector_store = InMemoryVectorStore(embedding_azureopenai())
+
         self.text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
             chunk_size=250, chunk_overlap=0
         )
@@ -39,7 +37,7 @@ class VectorStoreClient:
         return self.vector_store.similarity_search(query=query, k=k)
 
     def clear_vector_store(self):
-        self.vector_store = InMemoryVectorStore(OpenAIEmbeddings())
+        self.vector_store = InMemoryVectorStore(embedding_azureopenai())
         print("Vector store cleared.")
 
     def as_retriever(self):
