@@ -22,12 +22,17 @@ jobs:
       - name: Test code and Create Test Coverage Reports
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version-file: ".python-version"
           cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install uv
       - run: |
-          pip install -r requirements-dev.txt
-          ruff check
+          uv sync --frozen
+          uv ruff check
           pytest
+
       - name: Test Docker Image Build
         run: |
           set +e
