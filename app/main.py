@@ -1,7 +1,10 @@
 from contextlib import asynccontextmanager
 from logging import getLogger
 
+import uvicorn
 from fastapi import FastAPI
+
+from app.config import config
 
 from app.antropic_bedrock.router import router as anthropic_bedrock_router
 from app.azure_openai.router import router as azure_openai_router

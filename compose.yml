@@ -75,7 +75,6 @@ services:
             - LICENCE
         - action: rebuild
           path: ./pyproject.toml
-          target: /home/python/app/pyproject.toml
     networks:
       - cdp-tenant
 

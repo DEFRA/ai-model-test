@@ -41,7 +41,6 @@ CMD ["uv", "run", "--no-sync", "-m", "app.main"]
 
 FROM python:${BASE_VERSION} AS production
 
-ENV SYSTEM_VERSION_COMPAT=0
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHON_ENV=production
@@ -70,7 +69,7 @@ COPY --chown=python:python --from=development /home/python/app/uv.lock .
 
 RUN uv sync --frozen --no-dev
 
-COPY --chown=python:python --from=development /home/python/app/app .
+COPY --chown=python:python --from=development /home/python/app/app ./app/
 COPY --chown=python:python logging.json .
 
 ARG PORT
