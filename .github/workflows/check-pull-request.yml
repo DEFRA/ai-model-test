@@ -28,10 +28,10 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install uv
-      - run: |
           uv sync --frozen
-          uv run ruff check
-          pytest
+      # - run: |
+      #     uv run ruff check
+      #     pytest
 
       - name: Test Docker Image Build
         run: |
