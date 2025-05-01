@@ -30,7 +30,7 @@ jobs:
           pip install uv
       - run: |
           uv sync --frozen
-          uv ruff check
+          uv run ruff check
           pytest
 
       - name: Test Docker Image Build
