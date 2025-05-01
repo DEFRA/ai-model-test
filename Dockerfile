@@ -1,5 +1,5 @@
 # Set default values for build arguments
-ARG BASE_VERSION=3.12.10-alpine3.21
+ARG BASE_VERSION=3.12.10-slim
 ARG PORT=8085
 ARG PORT_DEBUG=8086
 
@@ -9,8 +9,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHON_ENV=development
 
-RUN addgroup -S python \
-  && adduser -S python -G python
+RUN addgroup --gid 1000 python \
+  && adduser python \
+    --uid 1000 \
+    --gid 1000 \
+    --home /home/python \
+    --shell /bin/bash
 
 ENV PATH="/home/python/.local/bin:$PATH"
 
@@ -37,6 +41,7 @@ CMD ["uv", "run", "--no-sync", "-m", "app.main"]
 
 FROM python:${BASE_VERSION} AS production
 
+ENV SYSTEM_VERSION_COMPAT=0
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHON_ENV=production
@@ -44,10 +49,15 @@ ENV PYTHON_ENV=production
 ENV PATH="/home/python/.local/bin:$PATH"
 
 # CDP PLATFORM HEALTHCHECK REQUIREMENT
-RUN apk update  \
-  && apk add curl \ 
-  && addgroup -S python \
-  && adduser -S python -G python
+RUN apt update  \
+  && apt install curl -y
+
+RUN addgroup --gid 1000 python \
+  && adduser python \
+    --uid 1000 \
+    --gid 1000 \
+    --home /home/python \
+    --shell /bin/bash
 
 USER python
 
