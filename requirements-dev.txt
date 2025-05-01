@@ -1,5 +1,0 @@
--r requirements.txt
-httpx
-pytest
-ruff
-pre-commit

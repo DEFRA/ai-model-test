@@ -5,7 +5,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppConfig(BaseSettings):
+    python_env: str = "development"
     model_config = SettingsConfigDict()
+    host: str = "0.0.0.0"
     port: int = 8085
     mongo_uri: str = "mongodb://127.0.0.1:27017/"
     mongo_database: str = "ai-model-test"

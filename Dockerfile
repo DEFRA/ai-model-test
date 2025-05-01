@@ -1,54 +1,70 @@
-# syntax=docker/dockerfile:1
+# Set default values for build arguments
+ARG BASE_VERSION=3.12.10-alpine3.21
+ARG PORT=8085
+ARG PORT_DEBUG=8086
 
-# Based on Docker's Python guide https://docs.docker.com/language/python/
+FROM python:${BASE_VERSION} AS development
 
-ARG PYTHON_VERSION=3.12
-FROM python:${PYTHON_VERSION}-slim AS base
-
-# Prevents Python from writing pyc files.
 ENV PYTHONDONTWRITEBYTECODE=1
-
-# Keeps Python from buffering stdout and stderr to avoid situations where
-# the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
+ENV PYTHON_ENV=development
 
-# Default Port
-ENV UVICORN_PORT=8085
+RUN addgroup -S python \
+  && adduser -S python -G python
 
-# Add curl to template.
+ENV PATH="/home/python/.local/bin:$PATH"
+
+USER python
+
+RUN python -m pip install --user uv
+
+WORKDIR /home/python/app
+
+COPY --chown=python:python pyproject.toml .
+COPY --chown=python:python uv.lock .
+
+RUN uv sync --frozen
+
+COPY --chown=python:python app/ ./app/
+COPY --chown=python:python logging-dev.json .
+
+ARG PORT=8085
+ARG PORT_DEBUG=8086
+ENV PORT=${PORT}
+EXPOSE ${PORT} ${PORT_DEBUG}
+
+CMD ["uv", "run", "--no-sync", "-m", "app.main"]
+
+FROM python:${BASE_VERSION} AS production
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHON_ENV=production
+
+ENV PATH="/home/python/.local/bin:$PATH"
+
 # CDP PLATFORM HEALTHCHECK REQUIREMENT
-RUN apt-get update && apt-get install curl -y
+RUN apk update  \
+  && apk add curl \ 
+  && addgroup -S python \
+  && adduser -S python -G python
 
-WORKDIR /app
+USER python
 
-# Create a non-privileged user that the app will run under.
-# See https://docs.docker.com/go/dockerfile-user-best-practices/
-ARG UID=10001
-RUN adduser \
-  --disabled-password \
-  --gecos "" \
-  --home "/nonexistent" \
-  --shell "/sbin/nologin" \
-  --no-create-home \
-  --uid "${UID}" \
-  appuser
+RUN python -m pip install --user uv
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
-# Leverage a bind mount to requirements.txt to avoid having to copy them into
-# into this layer.
-RUN --mount=type=cache,target=/root/.cache/pip \
-  --mount=type=bind,source=requirements.txt,target=requirements.txt \
-  python -m pip install -r requirements.txt
+WORKDIR /home/python/app
 
-# Switch to the non-privileged user to run the application.
-USER appuser
+COPY --chown=python:python --from=development /home/python/app/pyproject.toml .
+COPY --chown=python:python --from=development /home/python/app/uv.lock .
 
-# Copy the source code into the container.
-COPY . .
+RUN uv sync --frozen --no-dev
 
-# Expose the port that the application listens on.
-EXPOSE 8085
+COPY --chown=python:python --from=development /home/python/app/app .
+COPY --chown=python:python logging.json .
 
-# Run the application.
-CMD ["uvicorn", "app.main:app", "--host=0.0.0.0", "--log-config", "logging.json"]
+ARG PORT
+ENV PORT=${PORT}
+EXPOSE ${PORT}
+
+CMD ["uv", "run", "--no-sync", "-m", "app.main"]
