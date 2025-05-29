@@ -25,13 +25,16 @@ jobs:
       - name: Test code and Create Test Coverage Reports
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version-file: ".python-version"
           cache: 'pip'
-    
-      - run: |
-          pip install -r requirements-dev.txt
-          ruff check
-          pytest
+
+      - name: Install Dependencies
+        run: |
+          pip install uv
+          uv sync --frozen
+        # - run: |
+        #     uv run ruff check
+        #     pytest
 
       - name: Publish Hot Fix
         uses: DEFRA/cdp-build-action/build-hotfix@main

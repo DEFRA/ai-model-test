@@ -32,11 +32,10 @@ services:
       - mongodb-data:/data
     restart: always
 
-  ################################################################################
-
   service:
     build:
       context: .
+      target: production
     ports:
       - 8085:8085
     links:
@@ -49,19 +48,35 @@ services:
         condition: service_started
     env_file:
       - "compose/aws.env"
-      - "compose/secrets.env"
     environment:
       PORT: 8085
-      S3_ENDPOINT: http://localstack:4566
+      LOCALSTACK_ENDPOINT: http://localstack:4566
       MONGO_URI: mongodb://mongodb:27017/
     develop:
       watch:
+        - action: sync
+          path: ./app
+          target: /home/python/app/app
+          ignore:
+            - README.md
+            - "**/*.md"
+            - "**/test_*.py"
+            - tests/**/*
+            - .git/**/*
+            - .venv/**/*
+            - .pytest_cache/**/*
+            - .ruff_cache/**/*
+            - .vscode/**/*
+            - .github/**/*
+            - requirements-dev.txt
+            - pytest.ini
+            - .pre-commit-config.yaml
+            - sonar-project.properties
+            - LICENCE
         - action: rebuild
-          path: .
+          path: ./pyproject.toml
     networks:
       - cdp-tenant
-
-################################################################################
 
 volumes:
   mongodb-data:

@@ -1,7 +1,10 @@
 from contextlib import asynccontextmanager
 from logging import getLogger
 
+import uvicorn
 from fastapi import FastAPI
+
+from app.config import config
 
 from app.antropic_bedrock.router import router as anthropic_bedrock_router
 from app.azure_openai.router import router as azure_openai_router
@@ -59,3 +62,20 @@ app.include_router(langchain_azure_openai_router)
 app.include_router(langgraph_rag_chat_router)
 app.include_router(langchain_simple_rag_chat_router)
 app.include_router(chat_history_router)
+
+def main():
+    log_config = (
+        "logging-dev.json" if config.python_env == "development" else "logging.json"
+    )
+
+    uvicorn.run(
+        "app.main:app",
+        host=config.host,
+        port=config.port,
+        log_config=log_config,
+        reload=config.python_env == "development",
+    )
+
+
+if __name__ == "__main__":
+    main()
