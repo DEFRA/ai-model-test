@@ -1,11 +1,43 @@
 services:
+  postgres:
+    build:
+      context: .
+      dockerfile: pgvector.Dockerfile
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      start_period: 5s
+      retries: 3
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - cdp-tenant
+
+  migrator:
+    build:
+      context: ./migrator
+    image: migrator
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - cdp-tenant
+    env_file:
+      - .env
+    volumes:
+      - ./changelog:/liquibase/services/coreai_mcu_knowledge_pgv/changelog
+
   localstack:
     image: localstack/localstack:3.0.2
     ports:
       - "4566:4566" # LocalStack Gateway
       - "4510-4559:4510-4559" # external services port range
     env_file:
-      - "compose/aws.env"
+      - .env
     environment:
       DEBUG: ${DEBUG:-1}
       LS_LOG: WARN # Localstack DEBUG Level
@@ -46,8 +78,12 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_started
+      postgres:
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
     env_file:
-      - "compose/aws.env"
+      - .env
     environment:
       PORT: 8085
       LOCALSTACK_ENDPOINT: http://localstack:4566
@@ -80,6 +116,7 @@ services:
 
 volumes:
   mongodb-data:
+  postgres-data:
 
 networks:
   cdp-tenant:
