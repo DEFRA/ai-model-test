@@ -32,7 +32,7 @@ def get_sql_engine() -> Engine:
             url,
             connect_args={
                 "sslmode": "require",
-                "sslcert": cert
+                "sslrootcert": cert
             }
         )
     else:
@@ -53,6 +53,7 @@ def check_connection(engine: Engine) -> bool:
 
 
 def get_token(dialect, conn_rec, cargs, cparams):
+    print(config.aws_region)
     if config.python_env == "development":
         cparams["password"] = config.postgres_password
     else:
