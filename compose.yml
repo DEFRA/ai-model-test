@@ -6,7 +6,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d ai_model_test"]
       interval: 10s
       start_period: 5s
       retries: 3
@@ -29,7 +29,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./changelog:/liquibase/services/coreai_mcu_knowledge_pgv/changelog
+      - ./changelog:/liquibase/services/ai_model_test/changelog
 
   localstack:
     image: localstack/localstack:3.0.2
@@ -67,7 +67,7 @@ services:
   service:
     build:
       context: .
-      target: production
+      target: development
     ports:
       - 8085:8085
     links:
@@ -88,6 +88,7 @@ services:
       PORT: 8085
       LOCALSTACK_ENDPOINT: http://localstack:4566
       MONGO_URI: mongodb://mongodb:27017/
+      POSTGRES_DB: "ai_model_test"
     develop:
       watch:
         - action: sync

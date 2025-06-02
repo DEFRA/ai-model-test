@@ -44,5 +44,11 @@ class AppConfig(BaseSettings):
     CDP_HTTP_PROXY: Optional[str] = None
     HTTPS_PROXY: Optional[str] = None
 
+    postgres_host: str
+    postgres_port: int = 5432
+    postgres_user: Optional[str] = "ai-model-test"
+    postgres_password: Optional[str] = None
+    postgres_db: Optional[str] = "ai_model_test"
+
 
 config = AppConfig()

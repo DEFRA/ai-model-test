@@ -22,10 +22,13 @@ dependencies = [
     "langchain-community>=0.3.21",
     "langchain-core>=0.3.56",
     "langchain-openai>=0.3.14",
+    "langchain-postgres>=0.0.14",
     "langgraph>=0.4.1",
     "openai>=1.76.2",
+    "psycopg-binary>=3.2.9",
     "pydantic-settings>=2.9.1",
     "pymongo[aws,encryption,snappy,zstd]>=4.12.1",
+    "sqlalchemy>=2.0.40",
 ]
 
 [dependency-groups]
