@@ -24,8 +24,6 @@ def get_sql_engine() -> Engine:
         database=config.postgres_db
     )
 
-    print(config.postgres_user)
-
     cert = custom_ca_certs.get(config.mongo_truststore)
 
     if cert:
