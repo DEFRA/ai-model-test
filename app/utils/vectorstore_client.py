@@ -2,12 +2,9 @@ from threading import Lock
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
-from langchain_core.vectorstores import InMemoryVectorStore
 from langchain_postgres import PGVector
 
 from app.common.sql_engine import get_sql_engine
-
-from app.config import config
 
 from app.utils.bedrock_embedding_client import embedding_bedrock
 
@@ -46,8 +43,7 @@ class VectorStoreClient:
         return self.vector_store.similarity_search(query=query, k=k)
 
     def clear_vector_store(self):
-        self.vector_store = InMemoryVectorStore(embedding_azureopenai())
-        print("Vector store cleared.")
+        self.vector_store.delete_collection()
 
     def as_retriever(self):
         return self.vector_store.as_retriever()
