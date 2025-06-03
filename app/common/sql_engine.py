@@ -24,10 +24,10 @@ def get_sql_engine() -> Engine:
         database=config.postgres_db
     )
 
-    cert = custom_ca_certs.get(config.mongo_truststore)
+    cert = custom_ca_certs.get(config.rds_truststore)
 
     if cert:
-        logger.info("Creating Postgres SQLAlchemy engine with custom TLS cert %s", config.mongo_truststore)
+        logger.info("Creating Postgres SQLAlchemy engine with custom TLS cert %s", config.rds_truststore)
         engine = create_engine(
             url,
             connect_args={

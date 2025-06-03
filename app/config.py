@@ -12,6 +12,7 @@ class AppConfig(BaseSettings):
     mongo_uri: str = "mongodb://127.0.0.1:27017/"
     mongo_database: str = "ai-model-test"
     mongo_truststore: str = "TRUSTSTORE_CDP_ROOT_CA"
+    rds_truststore: str = "TRUSTSTORE_RDS_ROOT_CA"
     http_proxy: Optional[HttpUrl] = None
     enable_metrics: bool = False
     tracing_header: str = "x-cdp-request-id"
