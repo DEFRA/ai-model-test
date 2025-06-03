@@ -56,6 +56,8 @@ def get_token(dialect, conn_rec, cargs, cparams):
     if config.python_env == "development":
         cparams["password"] = config.postgres_password
     else:
+        logger.info("Generating RDS auth token for Postgres connection")
+
         client = boto3.client("rds")
 
         token = client.generate_db_auth_token(
@@ -64,5 +66,7 @@ def get_token(dialect, conn_rec, cargs, cparams):
             Port=config.postgres_port,
             DBUsername=config.postgres_user
         )
+
+        logger.info("Generated RDS auth token for Postgres connection")
 
         cparams["password"] = token
