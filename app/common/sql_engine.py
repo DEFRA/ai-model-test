@@ -21,7 +21,8 @@ def get_sql_engine() -> Engine:
         username=config.postgres_user,
         host=config.postgres_host,
         port=config.postgres_port,
-        database=config.postgres_db
+        database=config.postgres_db,
+        password=get_token()
     )
 
     cert = custom_ca_certs.get(config.rds_truststore)
@@ -39,8 +40,6 @@ def get_sql_engine() -> Engine:
         logger.info("Creating Postgres SQLAlchemy engine")
         engine = create_engine(url)
 
-    listen(engine, "do_connect", get_token)
-
     logger.info("Testing Postgres SQLAlchemy connection to %s", config.postgres_host)
     check_connection(engine)
 
@@ -52,9 +51,9 @@ def check_connection(engine: Engine) -> bool:
         connection.execute(text("SELECT 1 FROM langchain_pg_collection"))
 
 
-def get_token(dialect, conn_rec, cargs, cparams):
+def get_token():
     if config.python_env == "development":
-        cparams["password"] = config.postgres_password
+        return config.postgres_password
     else:
         logger.info("Generating RDS auth token for Postgres connection")
 
@@ -69,4 +68,4 @@ def get_token(dialect, conn_rec, cargs, cparams):
 
         logger.info("Generated RDS auth token for Postgres connection")
 
-        cparams["password"] = token
+        return token
