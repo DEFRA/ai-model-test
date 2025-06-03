@@ -47,7 +47,7 @@ class AppConfig(BaseSettings):
 
     postgres_host: str
     postgres_port: int = 5432
-    postgres_user: Optional[str] = "ai-model-test"
+    postgres_user: Optional[str] = "ai_model_test"
     postgres_password: Optional[str] = None
     postgres_db: Optional[str] = "ai_model_test"
 
