@@ -49,7 +49,7 @@ def get_sql_engine() -> Engine:
 
 def check_connection(engine: Engine) -> bool:
     with engine.connect() as connection:
-        connection.execute(text("SELECT 1"))
+        connection.execute(text("SELECT 1 FROM langchain_pg_collection"))
 
 
 def get_token(dialect, conn_rec, cargs, cparams):
