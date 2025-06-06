@@ -44,5 +44,5 @@ async def setup_data():
         }
 
     except Exception as e:
-            logger.exception("Failed to setup data")
-            raise HTTPException(status_code=500, detail=str(e)) from e
+        logger.exception("Failed to setup data")
+        raise HTTPException(status_code=500, detail=str(e)) from e
