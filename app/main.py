@@ -10,6 +10,7 @@ from app.antropic_bedrock.router import router as anthropic_bedrock_router
 from app.azure_openai.router import router as azure_openai_router
 from app.chat_history.router import router as chat_history_router
 from app.common.mongo import get_mongo_client
+from app.common.sql_engine import get_sql_engine
 from app.common.s3 import S3Client
 from app.common.tracing import TraceIdMiddleware
 from app.data_ingestion.router import router as data_ingestion_router
@@ -33,6 +34,8 @@ async def lifespan(_: FastAPI):
 
     mongo_client = await get_mongo_client()
     logger.info("MongoDB client connected")
+    sql_engine = get_sql_engine()
+    logger.info("SQL engine connected")
     yield
 
     # Shutdown
@@ -45,6 +48,9 @@ async def lifespan(_: FastAPI):
         await mongo_client.close()
         logger.info("MongoDB client closed")
 
+    if sql_engine:
+        sql_engine.dispose()
+        logger.info("SQL engine disposed")
 
 app = FastAPI(lifespan=lifespan)
 

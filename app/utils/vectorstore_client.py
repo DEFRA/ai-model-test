@@ -2,10 +2,11 @@ from threading import Lock
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
-from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_postgres import PGVector
+
+from app.common.sql_engine import get_sql_engine
 
 from app.utils.bedrock_embedding_client import embedding_bedrock
-
 
 class VectorStoreClient:
     _instance = None
@@ -19,7 +20,12 @@ class VectorStoreClient:
         return cls._instance
 
     def _initialize(self):
-        self.vector_store = InMemoryVectorStore(embedding_bedrock())
+        self.vector_store = PGVector(
+            embedding_bedrock(),
+            collection_name="ai_model_test_vectors",
+            connection=get_sql_engine(),
+            use_jsonb=True,
+        )
 
         self.text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
             chunk_size=250, chunk_overlap=0
@@ -37,8 +43,7 @@ class VectorStoreClient:
         return self.vector_store.similarity_search(query=query, k=k)
 
     def clear_vector_store(self):
-        self.vector_store = InMemoryVectorStore(embedding_bedrock())
-        print("Vector store cleared.")
+        self.vector_store.delete_collection()
 
     def as_retriever(self):
         return self.vector_store.as_retriever()
