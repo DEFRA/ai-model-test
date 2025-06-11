@@ -15,6 +15,7 @@ class AppConfig(BaseSettings):
     http_proxy: Optional[HttpUrl] = None
     enable_metrics: bool = False
     tracing_header: str = "x-cdp-request-id"
+    log_config: str = "logging.json"
 
     AWS_REGION: Optional[str] = None
     AWS_ACCESS_KEY_ID: Optional[str] = None

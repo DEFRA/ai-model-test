@@ -24,8 +24,10 @@ dependencies = [
     "langchain-openai>=0.3.14",
     "langgraph>=0.4.1",
     "openai>=1.76.2",
+    "pydantic-core>=2.33.2",
     "pydantic-settings>=2.9.1",
     "pymongo[aws,encryption,snappy,zstd]>=4.12.1",
+    "uvicorn>=0.34.2",
 ]
 
 [dependency-groups]
