@@ -25,10 +25,10 @@ dependencies = [
     "langchain-postgres>=0.0.14",
     "langgraph>=0.4.1",
     "openai>=1.76.2",
-    "psycopg-binary>=3.2.9",
+    "pydantic-core>=2.33.2",
     "pydantic-settings>=2.9.1",
     "pymongo[aws,encryption,snappy,zstd]>=4.12.1",
-    "sqlalchemy>=2.0.40",
+    "uvicorn>=0.34.2",
 ]
 
 [dependency-groups]
