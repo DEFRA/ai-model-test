@@ -85,7 +85,6 @@ services:
     env_file:
       - .env
     environment:
-      PYTHON_ENV: development
       PORT: 8085
       LOCALSTACK_ENDPOINT: http://localstack:4566
       MONGO_URI: mongodb://mongodb:27017/

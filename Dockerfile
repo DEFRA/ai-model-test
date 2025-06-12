@@ -44,9 +44,7 @@ ENV LOG_CONFIG="logging.json"
 
 USER root
 
-# CDP requires a shell to run health checks
-# TODO: Major advantage of distroless is that it does not include a shell.
-# Need to check if CDP will support health checks without a shell in the future.
+# CDP requires a shell and curl to run health checks
 COPY --from=development /bin/sh /bin/sh
 
 # Copy curl from the development stage to production
