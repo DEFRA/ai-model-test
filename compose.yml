@@ -67,7 +67,7 @@ services:
   service:
     build:
       context: .
-      target: production
+      target: development
     ports:
       - 8085:8085
     links:

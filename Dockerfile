@@ -62,9 +62,6 @@ COPY --chown=nonroot:nonroot --from=development /home/nonroot/.venv .venv/
 COPY --chown=nonroot:nonroot --from=development /home/nonroot/app/ ./app/
 COPY --chown=nonroot:nonroot logging.json .
 
-HEALTHCHECK --interval=10s --start-period=5s --retries=3 \
-    CMD curl --fail http://localhost:${PORT}/health || exit 1
-
 ARG PORT
 ENV PORT=${PORT}
 EXPOSE ${PORT}
