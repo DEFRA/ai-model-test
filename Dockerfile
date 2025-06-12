@@ -5,7 +5,21 @@ ARG PORT_DEBUG=8086
 
 FROM defradigital/python-development:${PARENT_VERSION} AS development
 
+ENV PATH="/home/nonroot/.venv/bin:${PATH}"
 ENV LOG_CONFIG="logging-dev.json"
+
+USER root
+
+# Install curl via Debian 13 (trixie) backport to patch CVE-2025-0725
+RUN echo "deb https://deb.debian.org/debian bookworm-backports main" > /etc/apt/sources.list.d/bookworm-backports.list \
+    && apt update \
+    && apt install -t bookworm-backports -y --no-install-recommends \
+        curl \
+    && rm -rf /var/lib/apt/lists/*
+
+USER nonroot
+
+WORKDIR /home/nonroot
 
 COPY --chown=nonroot:nonroot pyproject.toml .
 COPY --chown=nonroot:nonroot uv.lock .
@@ -21,23 +35,38 @@ ARG PORT_DEBUG=8086
 ENV PORT=${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
-ENTRYPOINT [ "uv", "run", "--no-sync", "-m", "app.main" ]
+CMD [ "-m", "app.main" ]
 
 FROM defradigital/python:${PARENT_VERSION} AS production
 
-WORKDIR /home/nonroot
-
+ENV PATH="/home/nonroot/.venv/bin:${PATH}"
 ENV LOG_CONFIG="logging.json"
 
-COPY --chown=nonroot:nonroot --from=development /home/nonroot/.venv .venv
-COPY --chown=nonroot:nonroot --from=development /home/nonroot/pyproject.toml .
-COPY --chown=nonroot:nonroot --from=development /home/nonroot/uv.lock .
+USER root
+
+# CDP requires a shell to run health checks
+# TODO: Major advantage of distroless is that it does not include a shell.
+# Need to check if CDP will support health checks without a shell in the future.
+COPY --from=development /bin/sh /bin/sh
+
+# Copy curl from the development stage to production
+COPY --from=development /lib/x86_64-linux-gnu/* /lib/x86_64-linux-gnu/
+COPY --from=development /bin/curl /bin/curl
+
+USER nonroot
+
+WORKDIR /home/nonroot
+
+COPY --chown=nonroot:nonroot --from=development /home/nonroot/.venv .venv/
 
 COPY --chown=nonroot:nonroot --from=development /home/nonroot/app/ ./app/
 COPY --chown=nonroot:nonroot logging.json .
+
+HEALTHCHECK --interval=10s --start-period=5s --retries=3 \
+    CMD curl --fail http://localhost:${PORT}/health || exit 1
 
 ARG PORT
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-ENTRYPOINT [ "uv", "run", "--no-sync", "-m", "app.main" ]
+CMD [ "-m", "app.main" ]
