@@ -12,7 +12,7 @@ def get_bedrock_client():
     if bedrock_client is None:
         bedrock_client = boto3.client(
             "bedrock-runtime",
-            region_name=settings.AWS_REGION_BEDROCK
+            region_name=settings.aws_region
         )
 
     return bedrock_client
