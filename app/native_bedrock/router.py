@@ -25,7 +25,7 @@ async def chat(request: QuestionRequest):
 
         return {
             "status": "success",
-            "answer": response.content,
+            "answer": response,
         }
 
     except Exception as e:
