@@ -39,7 +39,9 @@ def chat_bedrock(question: str) -> str:
         modelId=settings.AWS_BEDROCK_MODEL,
         contentType="application/json",
         accept="application/json",
-        body=json_request
+        body=json_request,
+        guardrailIdentifier=settings.AWS_BEDROCK_GUARDRAIL,
+        guardrailVersion=settings.AWS_BEDROCK_GUARDRAIL_VERSION,
     )
 
     model_response = json.loads(response["body"].read())
