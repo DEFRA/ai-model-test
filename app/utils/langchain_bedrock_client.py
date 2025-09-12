@@ -12,12 +12,14 @@ def chat_bedrock_client():
                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY_BEDROCK,
                 region=settings.AWS_REGION_BEDROCK,
                 model=model,
-                beta_use_converse_api=True
+                beta_use_converse_api=True,
+                guardrails={"guardrailId": settings.AWS_BEDROCK_GUARDRAIL, "guardrailVersion": settings.AWS_BEDROCK_GUARDRAIL_VERSION, "trace": "enabled"}
         )
     else:
         llm = ChatBedrock(
                 model=model,
-                beta_use_converse_api=True
+                beta_use_converse_api=True,
+                guardrails={"guardrailId": settings.AWS_BEDROCK_GUARDRAIL, "guardrailVersion": settings.AWS_BEDROCK_GUARDRAIL_VERSION, "trace": "enabled"}
         )
 
     return llm
