@@ -70,15 +70,11 @@ app.include_router(langchain_simple_rag_chat_router)
 app.include_router(chat_history_router)
 
 def main():
-    log_config = (
-        "logging-dev.json" if config.python_env == "development" else "logging.json"
-    )
-
     uvicorn.run(
         "app.main:app",
         host=config.host,
         port=config.port,
-        log_config=log_config,
+        log_config=config.log_config,
         reload=config.python_env == "development",
     )
 
