@@ -46,4 +46,4 @@ def chat_bedrock(question: str) -> str:
 
     model_response = json.loads(response["body"].read())
 
-    return model_response["content"][0]["text"]
+    return model_response["messages"][0]["content"][0]["text"]
