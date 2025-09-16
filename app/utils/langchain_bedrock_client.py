@@ -10,7 +10,7 @@ def chat_bedrock_client():
             region=settings.aws_region,
             model_id=model,
             provider="anthropic",
-            guardrails={"guardrailId": settings.AWS_BEDROCK_GUARDRAIL, "guardrailVersion": settings.AWS_BEDROCK_GUARDRAIL_VERSION, "trace": "enabled"}
+            guardrails={"guardrailIdentifier": settings.AWS_BEDROCK_GUARDRAIL, "guardrailVersion": settings.AWS_BEDROCK_GUARDRAIL_VERSION, "trace": "enabled"}
     )
 
     return llm
