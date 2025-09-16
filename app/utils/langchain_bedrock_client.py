@@ -8,7 +8,7 @@ def chat_bedrock_client():
 
     llm = ChatBedrockConverse(
             region=settings.aws_region,
-            model=model,
+            model_id=model,
             guardrails={"guardrailId": settings.AWS_BEDROCK_GUARDRAIL, "guardrailVersion": settings.AWS_BEDROCK_GUARDRAIL_VERSION, "trace": "enabled"}
     )
 
