@@ -8,8 +8,6 @@ from app.config import config as settings
 
 logger = getLogger(__name__)
 
-USE_CREDENTIALS = settings.AWS_USE_CREDENTIALS_BEDROCK == "true"
-
 class BedrockAnthropicClient:
     """AWS Bedrock Anthropic client implementation."""
     _instance: Optional[AsyncAnthropicBedrock] = None
@@ -17,14 +15,7 @@ class BedrockAnthropicClient:
     @classmethod
     def get_client(cls) -> AsyncAnthropicBedrock:
         if cls._instance is None:
-            if USE_CREDENTIALS:
-                cls._instance = AsyncAnthropicBedrock(
-                    aws_access_key=settings.AWS_ACCESS_KEY_ID_BEDROCK,
-                    aws_secret_key=settings.AWS_SECRET_ACCESS_KEY_BEDROCK,
-                    aws_region=settings.AWS_REGION_BEDROCK
-                )
-            else:
-                cls._instance = AsyncAnthropicBedrock()
+            cls._instance = AsyncAnthropicBedrock()
         return cls._instance
 
 class AnthropicClient:

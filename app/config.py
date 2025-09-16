@@ -32,6 +32,9 @@ class AppConfig(BaseSettings):
     AWS_REGION_BEDROCK: Optional[str] = None
     AWS_BEDROCK_MODEL: Optional[str] = None
     AWS_USE_CREDENTIALS_BEDROCK: Optional[str] = None
+    AWS_BEDROCK_GUARDRAIL: Optional[str] = None
+    AWS_BEDROCK_GUARDRAIL_VERSION: Optional[str] = None
+    AWS_BEDROCK_EMBEDDING_MODEL: Optional[str] = None
 
     # Anthropic
     ANTHROPIC_MAX_TOKENS: Optional[int] = None
