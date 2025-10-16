@@ -35,14 +35,16 @@ def chat_bedrock(question: str) -> str:
 
     json_request = json.dumps(request)
 
-    response = bedrock_client.invoke_model(
-        modelId=settings.AWS_BEDROCK_MODEL,
-        contentType="application/json",
-        accept="application/json",
-        body=json_request,
-        guardrailIdentifier=settings.AWS_BEDROCK_GUARDRAIL,
-        guardrailVersion=settings.AWS_BEDROCK_GUARDRAIL_VERSION,
-    )
+    invoke_args = {
+        "modelId": settings.AWS_BEDROCK_MODEL,
+        "body": json_request
+    }
+
+    if settings.AWS_BEDROCK_GUARDRAIL and settings.AWS_BEDROCK_GUARDRAIL_VERSION:
+        invoke_args["guardrailIdentifier"] = settings.AWS_BEDROCK_GUARDRAIL
+        invoke_args["guardrailVersion"] = settings.AWS_BEDROCK_GUARDRAIL_VERSION
+
+    response = bedrock_client.invoke_model(**invoke_args)
 
     model_response = json.loads(response["body"].read())
 
